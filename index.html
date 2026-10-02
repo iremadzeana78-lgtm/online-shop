@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUXE — ონლაინ მაღაზია</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+Georgian:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS ფაილის დაკავშირება -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-container">
+      <a href="#" class="logo"><i class="fa-solid fa-crown"></i> LUXE</a>
+      
+      <div class="search-wrapper">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="searchInput" class="search-input" placeholder="მოძებნე ფეხსაცმელი, ტანსაცმელი...">
+      </div>
+
+      <button class="cart-btn" id="openCartBtn">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span>კალათა</span>
+        <span class="cart-badge" id="cartCount">0</span>
+      </button>
+
+      <div class="auth-actions" id="authActions">
+        <button class="auth-open-btn" id="openAuthBtn" type="button">
+          <i class="fa-regular fa-user"></i>
+          <span>შესვლა / რეგისტრაცია</span>
+        </button>
+        <div class="user-profile" id="userProfile" hidden>
+          <span class="user-avatar" id="userAvatar" aria-hidden="true"></span>
+          <span class="user-name" id="userName"></span>
+          <button class="logout-btn" id="logoutBtn" type="button" aria-label="გასვლა" title="გასვლა">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-card">
+      <div class="hero-content">
+        <span class="hero-tag">ახალი კოლექცია 2026</span>
+        <h1 class="hero-title">აღმოაჩინე ექსკლუზიური სტილი</h1>
+        <p class="hero-desc">საუკეთესო ხარისხის ფეხსაცმელები, ტანსაცმელი და ყოველდღიური აქსესუარები ერთ სივრცეში.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-container">
+    <div class="categories-bar">
+      <button class="cat-btn active" data-category="all"><i class="fa-solid fa-border-all"></i> ყველა</button>
+      <button class="cat-btn" data-category="shoes"><i class="fa-solid fa-shoe-prints"></i> ფეხსაცმელი</button>
+      <button class="cat-btn" data-category="clothes"><i class="fa-solid fa-shirt"></i> ტანსაცმელი</button>
+      <button class="cat-btn" data-category="general"><i class="fa-solid fa-couch"></i> საყოფაცხოვრებო</button>
+    </div>
+
+    <div class="products-grid" id="productsGrid"></div>
+  </main>
+
+  <!-- CART DRAWER -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h2><i class="fa-solid fa-cart-shopping"></i> ჩემი კალათა</h2>
+      <button class="close-cart" id="closeCartBtn">&times;</button>
+    </div>
+    
+    <div class="cart-items" id="cartItems"></div>
+
+    <div class="cart-footer">
+      <div class="total-row">
+        <span>სულ:</span>
+        <span id="cartTotal">0.00 ₾</span>
+      </div>
+      <button class="checkout-btn" onclick="checkout()">შეკვეთის გაფორმება</button>
+    </div>
+  </div>
+  
+
+  <div class="auth-overlay" id="authOverlay" aria-hidden="true">
+    <section class="auth-dialog" id="authDialog" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+      <button class="auth-close" id="closeAuthBtn" type="button" aria-label="დახურვა">&times;</button>
+      <div class="auth-heading">
+        <span class="auth-mark"><i class="fa-solid fa-crown"></i></span>
+        <h2 id="authTitle">მოგესალმებით</h2>
+        <p id="authSubtitle">შედით თქვენს LUXE ანგარიშში</p>
+      </div>
+
+      <form class="auth-form" id="loginForm" novalidate>
+        <label class="auth-field">
+          <span>ელფოსტა</span>
+          <input type="email" name="email" autocomplete="email" placeholder="name@example.com" required>
+        </label>
+        <label class="auth-field">
+          <span>პაროლი</span>
+          <input type="password" name="password" autocomplete="current-password" placeholder="შეიყვანეთ პაროლი" required>
+        </label>
+        <button class="auth-submit" type="submit">შესვლა</button>
+        <p class="auth-switch">ჯერ არ გაქვთ ანგარიში? <button type="button" data-auth-switch="register">რეგისტრაცია</button></p>
+      </form>
+
+      <form class="auth-form" id="registerForm" hidden novalidate>
+        <label class="auth-field">
+          <span>სრული სახელი</span>
+          <input type="text" name="name" autocomplete="name" placeholder="თქვენი სახელი" required>
+        </label>
+        <label class="auth-field">
+          <span>ელფოსტა</span>
+          <input type="email" name="email" autocomplete="email" placeholder="name@example.com" required>
+        </label>
+        <label class="auth-field">
+          <span>პაროლი</span>
+          <input type="password" name="password" autocomplete="new-password" placeholder="მინიმუმ 6 სიმბოლო" minlength="6" required>
+        </label>
+        <label class="auth-field">
+          <span>გაიმეორეთ პაროლი</span>
+          <input type="password" name="confirmPassword" autocomplete="new-password" placeholder="გაიმეორეთ პაროლი" required>
+        </label>
+        <button class="auth-submit" type="submit">ანგარიშის შექმნა</button>
+        <p class="auth-switch">უკვე გაქვთ ანგარიში? <button type="button" data-auth-switch="login">შესვლა</button></p>
+      </form>
+    </section>
+  </div>
+
+  <div class="toast" id="toast">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="toastMsg">დაემატა კალათაში!</span>
+  </div>
+
+  <!-- JS ფაილის დაკავშირება -->
+  <script src="script.js"></script>
+</body>
+</html>
